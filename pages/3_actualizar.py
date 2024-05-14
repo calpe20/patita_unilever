@@ -11,7 +11,7 @@ st.set_page_config(
 def load_data(path: str):
     data = pd.read_excel(path)
     eliminar("./data/actualizada.xlsx")
-    data.to_excel("./data/actualizada.xlsx")
+    data.to_excel("./data/actualizada.xlsx", index=False)
     return data
 
 st.header("Actualizar Data")
