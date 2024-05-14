@@ -42,10 +42,10 @@ df_cuota_filtro["Cuota S/"] = round(df_cuota_filtro["Cuota S/"], 2)
 # Calculosdf_cuota_filtro["Cuota S/"] = round(df_cuota_filtro["Cuota S/"], 2)
 df_cuota_filtro["Deberìa"] = round((df_cuota_filtro["Cuota S/"]/df_dias["DIAS PROGRAMADOS"].iloc[0])*df_dias["DIAS TRABAJADOS"].iloc[0], 2)
 df_cuota_filtro["Proyección"] = round((df_cuota_filtro["Avance"]/df_dias["DIAS TRABAJADOS"].iloc[0])*df_dias["DIAS PROGRAMADOS"].iloc[0], 2)
-df_cuota_filtro["Proy %"] = round((df_cuota_filtro["Proyección"]/df_cuota_filtro["Cuota S/"])*100, 2)
+df_cuota_filtro["Proy %"] = round((df_cuota_filtro["Proyección"]/df_cuota_filtro["Cuota S/"])*100)
 df_cuota_filtro["Proy %"] = df_cuota_filtro["Proy %"].replace([np.inf, -np.inf], 0)
 df_cuota_filtro["Faltante"] = np.where(round(df_cuota_filtro["Cuota S/"] - df_cuota_filtro["Avance"], 2) < 0, 0.00, round(df_cuota_filtro["Cuota S/"] - df_cuota_filtro["Avance"], 2))
-df_cuota_filtro["Av PDV %"] = round((df_cuota_filtro["Avance PDV"] / df_cuota_filtro["Cuota Cob"]) * 100, 2)
+df_cuota_filtro["Av PDV %"] = round((df_cuota_filtro["Avance PDV"] / df_cuota_filtro["Cuota Cob"]) * 100)
 #
 
 total_cuota = round(df_cuota_filtro['Cuota S/'].sum())
