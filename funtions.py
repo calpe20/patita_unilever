@@ -5,8 +5,8 @@ import os
 
 def actualizar_dias(df):
     df_dias = pd.DataFrame(df)
-    print(df_dias)
-    df_dias.to_excel("./data/dias.xlsx")
+    # print(df_dias)
+    df_dias.to_excel("./data/dias.xlsx", index=False)
 
 def eliminar(archivo_excel: str):
     # Verificar si el archivo existe antes de intentar eliminarlo

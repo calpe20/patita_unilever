@@ -11,6 +11,9 @@ st.set_page_config(
 st.header("Avance de Ventas General")
 df_venta = pd.read_excel("./data/actualizada.xlsx")
 df_cuota = pd.read_excel("./data/cuota.xlsx")
+df_dias = pd.read_excel("./data/dias.xlsx")
+df_dias.columns = ("DIAS PROGRAMADOS", "DIAS TRABAJADOS", "DIAS FALTANTES")
+
 df_avance_vendedor = df_venta.groupby('VendedorNombre')['Total'].sum()
 
 df_avance_cobertur = df_venta.groupby('VendedorNombre')['ClienteCodigo'].nunique()
@@ -32,17 +35,25 @@ df_cuota_filtro = pd.merge(df_cuota_filtro, df_avance_vendedor, on="VendedorNomb
 df_cuota_filtro = pd.merge(df_cuota_filtro, df_avance_cobertur, on="VendedorNombre", how="inner")
 df_cuota_filtro.columns = ["VendedorNombre", "Cuota S/", "Cuota Cob", "Avance", "Avance PDV"]
 df_cuota_filtro["Avance %"] = round(df_cuota_filtro["Avance"]/ df_cuota_filtro["Cuota S/"], 2)*100
-df_cuota_filtro["Faltante"] = np.where(round(df_cuota_filtro["Cuota S/"] - df_cuota_filtro["Avance"], 2) < 0, 0.00, round(df_cuota_filtro["Cuota S/"] - df_cuota_filtro["Avance"], 2))
+
 df_cuota_filtro["Avance %"] = df_cuota_filtro["Avance %"].replace([np.inf, -np.inf], 0)
 df_cuota_filtro['Avance'] = round(df_cuota_filtro["Avance"], 2)
 df_cuota_filtro["Cuota S/"] = round(df_cuota_filtro["Cuota S/"], 2)
+# Calculosdf_cuota_filtro["Cuota S/"] = round(df_cuota_filtro["Cuota S/"], 2)
+df_cuota_filtro["Deberìa"] = round((df_cuota_filtro["Cuota S/"]/df_dias["DIAS PROGRAMADOS"].iloc[0])*df_dias["DIAS TRABAJADOS"].iloc[0], 2)
+df_cuota_filtro["Proyección"] = round((df_cuota_filtro["Avance"]/df_dias["DIAS TRABAJADOS"].iloc[0])*df_dias["DIAS PROGRAMADOS"].iloc[0], 2)
+df_cuota_filtro["Proy %"] = round((df_cuota_filtro["Proyección"]/df_cuota_filtro["Cuota S/"])*100, 2)
+df_cuota_filtro["Proy %"] = df_cuota_filtro["Proy %"].replace([np.inf, -np.inf], 0)
+df_cuota_filtro["Faltante"] = np.where(round(df_cuota_filtro["Cuota S/"] - df_cuota_filtro["Avance"], 2) < 0, 0.00, round(df_cuota_filtro["Cuota S/"] - df_cuota_filtro["Avance"], 2))
+df_cuota_filtro["Av PDV %"] = round((df_cuota_filtro["Cuota Cob"] / df_cuota_filtro["Avance PDV"]) * 100, 2)
+#
 
 total_cuota = round(df_cuota_filtro['Cuota S/'].sum())
 total_avance = round(df_cuota_filtro['Avance'].sum())
 col2.metric(label="Cuota", value='{:,.0f}'.format(total_cuota))
 col3.metric(label="Avance", value='{:,.0f}'.format(total_avance))
 col4.metric(label="Avance %", value='{:,.0f}%'.format(round(total_avance/total_cuota, 2)*100))
-df_cuota_filtro = df_cuota_filtro[["VendedorNombre", "Cuota S/", "Avance", "Avance %", "Cuota Cob", "Avance PDV"]]
+df_cuota_filtro = df_cuota_filtro[["VendedorNombre", "Cuota S/", "Avance", "Avance %", "Deberìa", "Proyección", "Proy %", "Faltante", "Cuota Cob", "Avance PDV", "Av PDV %"]]
 
 # CSS personalizado para hacer que el DataFrame sea responsivo
 css = """
@@ -55,14 +66,26 @@ css = """
     .responsive-table table{
         width: 100%
     }
+    .responsive-table table td:nth-child(11){
+        text-align: center;
+    }
+    .responsive-table table td:nth-child(10){
+        text-align: right;
+    }
+    .responsive-table table td:nth-child(9){
+        text-align: right;
+    }
+    .responsive-table table td:nth-child(8){
+        text-align: right;
+    }
     .responsive-table table td:nth-child(7){
         text-align: right;
     }
     .responsive-table table td:nth-child(6){
-        text-align: center;
+        text-align: right;
     }
     .responsive-table table td:nth-child(5){
-        text-align: center;
+        text-align: right;
     }
     .responsive-table table td:nth-child(4){
         text-align: right;
@@ -77,6 +100,16 @@ css = """
 """
 st.markdown(css, unsafe_allow_html=True)
 # st.dataframe(df_cuota_filtro)
+df_transposed = df_dias.transpose()
+
+# Renombrar la columna index
+df_transposed.index.name = 'Variable'
+
+# Renombrar la columna 0
+df_transposed.columns = ['Dias']
+
 with st.container():
     st.write("Avance de Ventas por Vendedor:")
     st.markdown(f'<div class="row"><div class="col-2"><div class="responsive-table">{df_cuota_filtro.to_html(index=False)}</div>', unsafe_allow_html=True)
+    st.write("---")
+    st.write(df_transposed)
