@@ -18,7 +18,7 @@ df_avance_vendedor = df_venta.groupby('VendedorNombre')['Total'].sum()
 
 df_avance_cobertur = df_venta.groupby('VendedorNombre')['ClienteCodigo'].nunique()
 # st.dataframe(df_cuota)
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col4 = st.columns(3)
 canales = col1.multiselect('Canales', df_cuota['Canal'].unique())
 
 
@@ -50,9 +50,12 @@ df_cuota_filtro["Av PDV %"] = round((df_cuota_filtro["Avance PDV"] / df_cuota_fi
 
 total_cuota = round(df_cuota_filtro['Cuota S/'].sum())
 total_avance = round(df_cuota_filtro['Avance'].sum())
-col2.metric(label="Cuota", value='{:,.0f}'.format(total_cuota))
-col3.metric(label="Avance", value='{:,.0f}'.format(total_avance))
-col4.metric(label="Avance %", value='{:,.0f}%'.format(round(total_avance/total_cuota, 2)*100))
+col21, col22 = col2.columns(2)
+col21.metric(label="Cuota", value='{:,.0f}'.format(total_cuota))
+col22.metric(label="Avance", value='{:,.0f}'.format(total_avance))
+col41, col42 = col4.columns(2)
+col41.metric(label="Avance %", value='{:,.0f}%'.format(round(total_avance/total_cuota, 2)*100))
+col42.metric(label="Recomendado %", value='{:,.0f}%'.format(round(df_dias["DIAS TRABAJADOS"].iloc[0]/df_dias["DIAS PROGRAMADOS"].iloc[0], 2)*100))
 df_cuota_filtro = df_cuota_filtro[["VendedorNombre", "Cuota S/", "Avance", "Avance %", "Deberìa", "Proyección", "Proy %", "Faltante", "Cuota Cob", "Avance PDV", "Av PDV %"]]
 
 # CSS personalizado para hacer que el DataFrame sea responsivo
@@ -108,6 +111,13 @@ df_transposed.index.name = 'Variable'
 # Renombrar la columna 0
 df_transposed.columns = ['Dias']
 
+total_row = df_cuota_filtro.sum().to_frame().T
+
+total_row.columns = ("Total", "Cuota S/", "Avance", "Avance %", "Deberìa", "Proyección", "Proy %", "Faltante", "Cuota Cob", "Avance PDV", "Av PDV %")
+total_row["Total"] = "Total"
+total_row.index = ['Total']
+df = pd.concat([df_cuota_filtro, total_row])
+# df.columns = ("VendedorNombre", "Cuota S/", "Avance", "Avance %", "Deberìa", "Proyección", "Proy %", "Faltante", "Cuota Cob", "Avance PDV", "Av PDV %")
 with st.container():
     st.write("Avance de Ventas por Vendedor:")
     st.markdown(f'<div class="row"><div class="col-2"><div class="responsive-table">{df_cuota_filtro.to_html(index=False)}</div>', unsafe_allow_html=True)
