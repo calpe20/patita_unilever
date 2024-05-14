@@ -78,5 +78,5 @@ css = """
 st.markdown(css, unsafe_allow_html=True)
 # st.dataframe(df_cuota_filtro)
 with st.container():
-    st.write("Ventas por Vendedor:")
+    st.write("Avance de Ventas por Vendedor:")
     st.markdown(f'<div class="row"><div class="col-2"><div class="responsive-table">{df_cuota_filtro.to_html(index=False)}</div>', unsafe_allow_html=True)
