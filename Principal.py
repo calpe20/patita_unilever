@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from funtions import load_data, dias_transcurridos, contar_domingos
+from funtions import actualizar_dias
 import altair as alt
 
 st.set_page_config(
@@ -12,13 +12,14 @@ st.set_page_config(
 #st.markdown("v1.0.0")
 
 
-
-# df = load_data("./venta detalle unilever al 10052024.xlsx")
 df = pd.read_excel("./data/actualizada.xlsx")
 df_cuota = pd.read_excel("./data/cuota.xlsx")
+df_dia = pd.read_excel("./data/dias.xlsx")
+
 
 df_totales = df.groupby('VendedorNombre')['Total'].sum()
 df['Fecha'] = df['Fecha'].dt.strftime('%Y-%m-%d')
+
 
 df_dias_totales_ = df.groupby('Fecha')['Total'].sum() 
 df_dias_totales = df_dias_totales_.reset_index()
@@ -30,12 +31,17 @@ df_dias_totales['Totales'] = df_total
 # Ejemplo de uso
 año = 2024
 mes = 5  # Mayo
-dias = dias_transcurridos()
+dias_programados = df_dia['dias_programados'].iloc[0]
+dias_trabajados = df_dia['dias_trabajados'].iloc[0]
 
 col1, col2, col3, col4, col5, col6 = st.columns(6)
-diaspro = col1.number_input("Dias Programados :", min_value=1, max_value=26, value=26)
-diastra = col2.number_input("Dias Trabajados :", min_value=1, max_value=26, value=dias)
+diaspro = col1.number_input("Dias Programados :", min_value=dias_programados, max_value=dias_programados, value=dias_programados)
+diastra = col2.number_input("Dias Trabajados :", min_value=1, max_value=dias_programados, value=dias_trabajados)
 diasfal = diaspro - diastra
+
+df_dias = {'dias_programados': [diaspro], 'dias_trabajados': [diastra], 'dias_faltantes': [diasfal]}
+actualizar_dias(df_dias)
+
 avance = round((df_total/df_total_cuota)*100)
 proyeccion = round((df_total/diastra)*diaspro, 2)
 proyeccpor = round((proyeccion / df_total_cuota)*100,2)
