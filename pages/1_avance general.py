@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from utils import css, css_1
 
 st.set_page_config(
     page_title="Dashboard Unilever",
@@ -58,111 +59,6 @@ col41.metric(label="Avance %", value='{:,.0f}%'.format(round(total_avance/total_
 col42.metric(label="Recomendado %", value='{:,.0f}%'.format(round(df_dias["DIAS TRABAJADOS"].iloc[0]/df_dias["DIAS PROGRAMADOS"].iloc[0], 2)*100))
 df_cuota_filtro = df_cuota_filtro[["VendedorNombre", "Cuota S/", "Avance", "Avance %", "Deberìa", "Proyección", "Proy %", "Faltante", "Cuota Cob", "Avance PDV", "Av PDV %"]]
 
-# CSS personalizado para hacer que el DataFrame sea responsivo
-css_1 = """
-<style>
-    .responsive-table {
-        font-family: verdana;
-        font-size: 12px;
-    }
-    .responsive-table table th{
-        background-color: orange;
-        color: white;
-        text-align: left;
-    }
-    .responsive-table table td:nth-child(11){
-        text-align: center;
-    }
-    .responsive-table table td:nth-child(10){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(9){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(8){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(7){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(6){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(5){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(4){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(3){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(2){
-        text-align: right;
-        padding: 2px;
-    }
-    .responsive-table table td{
-        padding: 2px;
-    }
-</style>
-"""
-css = """
-<style>
-    .responsive-table {
-        width: 100%;
-        font-family: verdana;
-        font-size: 12px;
-    }
-    .responsive-table table{
-        width: 100%
-    }
-    .responsive-table table th{
-        background-color: orange;
-        color: white;
-        text-align: left;
-    }
-    .responsive-table table td:nth-child(11){
-        text-align: center;
-    }
-    .responsive-table table td:nth-child(10){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(9){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(8){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(7){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(6){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(5){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(4){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(3){
-        text-align: right;
-    }
-    .responsive-table table td:nth-child(2){
-        text-align: right;
-        padding: 2px;
-    }
-    .responsive-table table td:nth-child(1){
-        text-align: left;
-        background-color: #DAF7A6;
-        font-weight: bold;
-        padding: 2px;
-    }
-    .responsive-table table td{
-        padding: 2px;
-    }
-</style>
-"""
 st.markdown(css, unsafe_allow_html=True)
 # st.dataframe(df_cuota_filtro)
 df_transposed = df_dias.transpose()
