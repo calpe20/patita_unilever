@@ -20,7 +20,8 @@ except locale.Error:
 st.set_page_config(
     page_title="Avance por Vendedor",
     page_icon=":bar_chart:",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 st.title("Avance por Vendedor")
 
