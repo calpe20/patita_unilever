@@ -55,6 +55,7 @@ df_new = filter_vendedor(df, vendedores)
 df_new = df_new[df_new["VendedorNombre"].isin(vendedor_canal["VendedorNombre"])]
 
 df_new['Fecha'] = df_new['Fecha'].dt.strftime('%Y-%m-%d')
+df_new['Total'] = round(df_new['Total'], 2)
 vendedor_clientes = df_new.groupby(["VendedorNombre", "Fecha"])["ClienteCodigo"].nunique()
 vendedor_ventas = df_new.groupby(["VendedorNombre", "Fecha"])["Total"].sum()
 vendedor_dias = df_new.groupby(["VendedorNombre", "NombreDia"])["Total"].sum()
