@@ -59,15 +59,16 @@ col42.metric(label="Recomendado %", value='{:,.0f}%'.format(round(df_dias["DIAS 
 df_cuota_filtro = df_cuota_filtro[["VendedorNombre", "Cuota S/", "Avance", "Avance %", "Deberìa", "Proyección", "Proy %", "Faltante", "Cuota Cob", "Avance PDV", "Av PDV %"]]
 
 # CSS personalizado para hacer que el DataFrame sea responsivo
-css = """
+css_1 = """
 <style>
     .responsive-table {
-        width: 100%;
         font-family: verdana;
         font-size: 12px;
     }
-    .responsive-table table{
-        width: 100%
+    .responsive-table table th{
+        background-color: orange;
+        color: white;
+        text-align: left;
     }
     .responsive-table table td:nth-child(11){
         text-align: center;
@@ -98,6 +99,61 @@ css = """
     }
     .responsive-table table td:nth-child(2){
         text-align: right;
+        padding: 2px;
+    }
+    .responsive-table table td{
+        padding: 2px;
+    }
+</style>
+"""
+css = """
+<style>
+    .responsive-table {
+        width: 100%;
+        font-family: verdana;
+        font-size: 12px;
+    }
+    .responsive-table table{
+        width: 100%
+    }
+    .responsive-table table th{
+        background-color: orange;
+        color: white;
+        text-align: left;
+    }
+    .responsive-table table td:nth-child(11){
+        text-align: center;
+    }
+    .responsive-table table td:nth-child(10){
+        text-align: right;
+    }
+    .responsive-table table td:nth-child(9){
+        text-align: right;
+    }
+    .responsive-table table td:nth-child(8){
+        text-align: right;
+    }
+    .responsive-table table td:nth-child(7){
+        text-align: right;
+    }
+    .responsive-table table td:nth-child(6){
+        text-align: right;
+    }
+    .responsive-table table td:nth-child(5){
+        text-align: right;
+    }
+    .responsive-table table td:nth-child(4){
+        text-align: right;
+    }
+    .responsive-table table td:nth-child(3){
+        text-align: right;
+    }
+    .responsive-table table td:nth-child(2){
+        text-align: right;
+        padding: 2px;
+    }
+    .responsive-table table td{
+        padding: 2px;
     }
 </style>
 """
@@ -123,3 +179,4 @@ with st.container():
     st.markdown(f'<div class="row"><div class="col-2"><div class="responsive-table">{df_cuota_filtro.to_html(index=False)}</div>', unsafe_allow_html=True)
     st.write("---")
     st.write(df_transposed)
+    
