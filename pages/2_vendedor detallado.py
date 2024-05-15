@@ -6,16 +6,6 @@ from utils import css
 from datetime import datetime
 
 import calendar
-import locale
-
-# Establecer la localización en español
-try:
-    locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
-except locale.Error:
-    try:
-        locale.setlocale(locale.LC_TIME, "es_ES")
-    except locale.Error:
-        st.warning("Locale es_Es.UTF-8")
 
 st.set_page_config(
     page_title="Avance por Vendedor",
@@ -37,14 +27,14 @@ canales = col1.multiselect('Canal', sorted(df_cuota['Canal'].unique()))
 df["NombreDia"] = df["Fecha"].dt.strftime("%A")
 
 # Mapear los nombres de los días de la semana en español
-nombres_dias_espanol = {day: calendar.day_name[i] for i, day in enumerate(calendar.day_name)}
-df["NombreDiaNumerico"] = df["NombreDia"].map(nombres_dias_espanol)
+# nombres_dias_espanol = {day: calendar.day_name[i] for i, day in enumerate(calendar.day_name)}
+# df["NombreDiaNumerico"] = df["NombreDia"].map(nombres_dias_espanol)
 
 # Ordenar el DataFrame por el día de la semana
-df = df.sort_values(by="NombreDiaNumerico")
+df = df.sort_values(by="NombreDia")
 
 # Eliminar la columna auxiliar de representación numérica del día de la semana
-df = df.drop(columns=["NombreDiaNumerico"])
+# df = df.drop(columns=["NombreDia"])
 
 if len(canales) > 0:
     vendedor_canal = df_cuota[df_cuota["Canal"].isin(canales)]
