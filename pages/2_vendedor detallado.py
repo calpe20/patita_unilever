@@ -4,6 +4,9 @@ import pandas as pd
 # import plotly.express as px
 from utils import css
 from datetime import datetime
+from deep_translator import GoogleTranslator
+
+traductor = GoogleTranslator(source='en', target='es')
 
 import calendar
 
@@ -24,11 +27,11 @@ canales = col1.multiselect('Canal', sorted(df_cuota['Canal'].unique()))
 
 # Suponiendo que df es tu DataFrame y ya has leído los datos
 # Obtener el nombre del día de la semana en español para todas las fechas en la columna "Fecha"
-df["NombreDia"] = df["Fecha"].dt.strftime("%A").str.upper()
+df["NombreDia"] = df["Fecha"].dt.strftime("%A")
 
 # Mapear los nombres de los días de la semana en español
-# nombres_dias_espanol = {day: calendar.day_name[i] for i, day in enumerate(calendar.day_name)}
-# df["NombreDiaNumerico"] = df["NombreDia"].map(nombres_dias_espanol)
+nombres_dias_espanol = {'Friday': 'Viernes', 'Tuesday': 'Martes', 'Monday': 'Lunes', 'Thursday': 'Jueves', 'Wednesday': 'Miércoles', 'Saturday': 'Sábado'}
+df["NombreDia"] = df["NombreDia"].map(nombres_dias_espanol)
 
 # Ordenar el DataFrame por el día de la semana
 df = df.sort_values(by="NombreDia")
@@ -60,7 +63,7 @@ vendedor_ventas = vendedor_ventas.unstack(fill_value=0)
 vendedor_clientes = vendedor_clientes.unstack(fill_value=0)
 vendedor_dias = vendedor_dias.unstack(fill_value=0)
 # Inserta el CSS personalizado
-with st.expander("**Avance Ventas: Vendedor por día de Semana**"):
+with st.expander("**Promedio Ventas: Vendedor por día de Semana**"):
     st.markdown(css, unsafe_allow_html=True)
     # Calcular totales de ventas por vendedor
     total_ventas_por_dias = vendedor_dias.sum(axis=0)
