@@ -152,6 +152,12 @@ css = """
         text-align: right;
         padding: 2px;
     }
+    .responsive-table table td:nth-child(1){
+        text-align: left;
+        background-color: #DAF7A6;
+        font-weight: bold;
+        padding: 2px;
+    }
     .responsive-table table td{
         padding: 2px;
     }
