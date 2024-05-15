@@ -24,7 +24,7 @@ canales = col1.multiselect('Canal', sorted(df_cuota['Canal'].unique()))
 
 # Suponiendo que df es tu DataFrame y ya has leído los datos
 # Obtener el nombre del día de la semana en español para todas las fechas en la columna "Fecha"
-df["NombreDia"] = df["Fecha"].dt.strftime("%A")
+df["NombreDia"] = df["Fecha"].dt.strftime("%A").str.upper()
 
 # Mapear los nombres de los días de la semana en español
 # nombres_dias_espanol = {day: calendar.day_name[i] for i, day in enumerate(calendar.day_name)}
