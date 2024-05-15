@@ -9,7 +9,7 @@ import calendar
 import locale
 
 # Establecer la localización en español
-locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
+locale.setlocale(locale.LC_TIME, "es_ES")
 
 st.set_page_config(
     page_title="Avance por Vendedor",
