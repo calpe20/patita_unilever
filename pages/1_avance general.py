@@ -77,8 +77,15 @@ total_row.index = ['Total']
 df = pd.concat([df_cuota_filtro, total_row])
 # df.columns = ("VendedorNombre", "Cuota S/", "Avance", "Avance %", "Deberìa", "Proyección", "Proy %", "Faltante", "Cuota Cob", "Avance PDV", "Av PDV %")
 with st.container():
+    total_ventas_por_dias = df_cuota_filtro.sum(axis=0)
+    # Crear un nuevo DataFrame con los totales de ventas por vendedor
+    total_ventas_dias_df = total_ventas_por_dias.rename('Total').to_frame().T
+    # total_ventas_dias_df = total_ventas_dias_df.reset_index()
+    total_ventas_dias_df["VendedorNombre"] = "Total"
+    # Concatenar el DataFrame de totales al DataFrame original
+    vendedor_ventas_tot = pd.concat([df_cuota_filtro, total_ventas_dias_df])
     st.write("Avance de Ventas por Vendedor:")
-    st.markdown(f'<div class="row"><div class="col-2"><div class="responsive-table">{df_cuota_filtro.to_html(index=False)}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="row"><div class="col-2"><div class="responsive-table">{vendedor_ventas_tot.to_html(index=False)}</div>', unsafe_allow_html=True)
     st.write("---")
     st.write(df_transposed)
     
