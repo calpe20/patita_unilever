@@ -55,6 +55,6 @@ df_ventas["Promedio Q2"] = round((df_ventas["202404"] + df_ventas["202405"] + df
 df_ventas["CIUDAD"] = "PUCALLPA"
 df_ventas = df_ventas[["CIUDAD","VendedorNombre","202401","202402","202403","Promedio Q1","202404","202405","202406","Promedio Q2"]]
 df_ventas.columns = ["CIUDAD","VENDEDOR","202401","202402","202403","PROMEDIO Q1","202404","202405","202406","PROMEDIO Q2"]
-
+df_ventas = df_ventas[df_ventas["Promedio Q2"]>0.00]
 df_ventas.to_excel("./data/CLUB TIGRES DE LA LIMPIEZA CIF - PUCALLPA.xlsx", index=False)
 st.table(df_ventas)
