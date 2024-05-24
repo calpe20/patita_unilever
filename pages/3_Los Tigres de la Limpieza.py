@@ -57,4 +57,4 @@ df_ventas = df_ventas[["CIUDAD","VendedorNombre","202401","202402","202403","Pro
 df_ventas.columns = ["CIUDAD","VENDEDOR","202401","202402","202403","PROMEDIO Q1","202404","202405","202406","PROMEDIO Q2"]
 
 df_ventas.to_excel("./data/CLUB TIGRES DE LA LIMPIEZA CIF - PUCALLPA.xlsx", index=False)
-st.dataframe(df_ventas)
+st.table(df_ventas)
