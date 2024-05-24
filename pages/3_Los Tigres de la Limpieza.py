@@ -20,6 +20,18 @@ st.title("Los Tigres de la Limpieza")
 
 # Cargamos la data historica
 df_data = pd.read_excel("./data/data_historico.xlsx")
+df_mayo = pd.read_excel("./data/actualizada.xlsx")
+df_mayo = df_mayo[["VendedorCodigo","VendedorNombre", "ProveedorCodigo", "ProveedorNombre", "NumPedido",
+                   "Canal", "NumDocumento", "ClienteCodigo", "ClienteNombre", "Grupo", "CodFamilia",
+                   "Familia", "ProductoCodigo", "ProductoDescripcion", "AbreviacionUnidadReferencia",
+                   "Cantidad", "ValorVenta", "Total", "Fecha", "DocIdentidad", "DireccionEntrega", 
+                   "Bonificacion", "Linea", "Categoria", "Marca", "Comision", "Peso", "CteCategoria",
+                   "CantidadUMES", "Departamento", "Provincia", "Distrito"]]
+
+df_data = pd.concat([df_data, df_mayo], axis=0)
+
+df_data["PERIODO"] = df_data["Fecha"].dt.year.astype(str) + df_data["Fecha"].dt.month.astype(str).str.zfill(2)
+
 df_vendedores = pd.DataFrame(list(df_data['VendedorNombre'].unique()))
 df_vendedores.columns = ["VendedorNombre"]
 df_productos = df_data[df_data["ProductoDescripcion"].str.contains("CIF")]
@@ -30,6 +42,7 @@ df_ventas_cif = df_data[df_data["ProductoDescripcion"].isin(df_productos["Produc
 df_ventas_cif_grupo = df_ventas_cif.groupby(["VendedorNombre", "PERIODO"])["Total"].sum().reset_index()
 
 df_ventas = df_ventas_cif_grupo.pivot_table(index="VendedorNombre", columns="PERIODO", values="Total", fill_value=0).reset_index()
+
 df_ventas["Promedio Q1"] = round((df_ventas["202401"] + df_ventas["202402"] + df_ventas["202403"])/3,2)
 # df_ventas["Promedio Q2"] = (df_ventas["202404"] + df_ventas["202405"] + df_ventas["202403"])/2
 df_ventas["202401"] = round(df_ventas["202401"],2)
